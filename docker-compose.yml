@@ -1,0 +1,7 @@
+#version '3.8'
+
+services:
+  consumer:
+    command: ./consumer
+    depends_on:
+      -
