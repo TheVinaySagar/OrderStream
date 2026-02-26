@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"awesomeProject/kafka"
 	"awesomeProject/models"
 	"awesomeProject/repositories"
 	"net/http"
@@ -9,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateOrder(repo *repositories.OrderRepository, p *kafka.Producer) gin.HandlerFunc {
+func CreateOrder(repo *repositories.OrderRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req models.Orders
 
@@ -28,13 +27,13 @@ func CreateOrder(repo *repositories.OrderRepository, p *kafka.Producer) gin.Hand
 			return
 		}
 
-		err = p.PublishOrderCreated(order)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
+		//err = p.PublishOrderCreated(order)
+		//if err != nil {
+		//	c.JSON(http.StatusBadRequest, gin.H{
+		//		"error": err.Error(),
+		//	})
+		//	return
+		//}
 
 		c.JSON(http.StatusCreated, order)
 	}

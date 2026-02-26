@@ -3,8 +3,9 @@ package main
 import (
 	"awesomeProject/config"
 	"awesomeProject/handlers"
-	"awesomeProject/kafka"
 	"awesomeProject/repositories"
+	"context"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,14 +20,16 @@ func main() {
 	client := config.Mongodb()
 	db := client.Database("NewData")
 
-	// Kafka Client
-	p := config.KafkaProducer()
-	//c := config.KafkaConsumer()
-	//topic := "orders"
+	session, err := client.StartSession()
+	if err != nil {
+		log.Panic(err)
+	}
+
+	defer session.EndSession(context.TODO())
 
 	// init repos
-	orderRepo := repositories.NewOrderRepository(db)
-	Prod := kafka.NewProducer(p)
+	orderRepo := repositories.NewOrderRepository(db, client)
+
 	//Cons := kafka.NewConsumer(c)
 
 	//Health Check
@@ -37,7 +40,7 @@ func main() {
 	})
 
 	// Order Routes
-	r.POST("/orders", handlers.CreateOrder(orderRepo, Prod))
+	r.POST("/orders", handlers.CreateOrder(orderRepo))
 	r.GET("/orders/:id", handlers.GetOrder(orderRepo))
 	r.PUT("/orders/:id", handlers.UpdateOrder(orderRepo))
 	r.DELETE("/orders/:id", handlers.DeleteOrder(orderRepo))

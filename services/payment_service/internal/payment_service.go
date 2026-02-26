@@ -80,7 +80,7 @@ func (c *PaymentService) Start(topics string) {
 				Topic:     &PaymentTopic,
 				Partition: kafka.PartitionAny,
 			},
-			Key:   []byte(order.EventID),
+			Key:   []byte(order.OrderID),
 			Value: payload,
 		}
 		c.Producer.Produce(msg, nil)
