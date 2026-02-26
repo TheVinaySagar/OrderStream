@@ -68,7 +68,7 @@ func (c *PaymentService) Start(topics string) {
 			"event_type": "payment.completed",
 			"timestamp":  time.Now(),
 			"data": map[string]interface{}{
-				"order_id": order.Data.ID,
+				"order_id": order.OrderID,
 				"status":   "paid",
 			},
 		}
