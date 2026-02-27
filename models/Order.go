@@ -22,12 +22,14 @@ type OrderCreatedEvent struct {
 
 type Message struct {
 	ID            string          `bson:"_id" json:"id"`
-	AggregateType string          `json:"aggregate_type"`
-	AggregateID   string          `json:"aggregate_id"`
-	EventType     string          `json:"event_type"`
-	Payload       json.RawMessage `json:"payload"`
-	CreatedAt     time.Time       `json:"created_at"`
-	ProcessedAt   *time.Time      `json:"processed_at"`
+	AggregateType string          `bson:"aggregatetype" json:"aggregate_type"`
+	AggregateID   string          `bson:"aggregateid" json:"aggregate_id"`
+	EventType     string          `bson:"eventtype" json:"event_type"`
+	Payload       json.RawMessage `bson:"payload" json:"payload"`
+	CreatedAt     time.Time       `bson:"createdat" json:"created_at"`
+	ProcessedAt   *time.Time      `bson:"processedat" json:"processed_at"`
+	LockedBy      string          `bson:"locked_by,omitempty" json:"locked_by,omitempty"`
+	LockedAt      *time.Time      `bson:"locked_at,omitempty" json:"locked_at,omitempty"`
 }
 
 func NewMessage(aggregateType, aggregateID, eventType string, payload any) (*Message, error) {

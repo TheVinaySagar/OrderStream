@@ -12,5 +12,5 @@ func main() {
 	h := internal.NewPaymentHandler()
 	consumer := internal.NewPaymentService(kafkaClient, h, p)
 
-	consumer.Start("order_created")
+	consumer.Start("order.published")
 }

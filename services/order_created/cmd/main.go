@@ -17,7 +17,7 @@ func main() {
 	Client := config.Mongodb()
 	Database := Client.Database("NewData")
 	ctx := context.Background()
-	producer := internal.NewOrderService(kafkaProducer, Client, Database)
+	producer := internal.NewOrderService(kafkaProducer, Client, Database, 10)
 	producer.Start(ctx)
 
 }
