@@ -13,11 +13,14 @@ type Orders struct {
 	Detail    string    `json:"detail"`
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"Updated_at"`
 }
 
 type OrderCreatedEvent struct {
-	OrderID string `json:"event_id"`
-	Total   int    `json:"total"`
+	OrderID     string `json:"order_id"`
+	TotalAmount int    `json:"total_amount"`
+	//Detail      string `json:"detail"`
+	//Status      string `json:"status"`
 }
 
 type Message struct {
@@ -28,8 +31,8 @@ type Message struct {
 	Payload       json.RawMessage `bson:"payload" json:"payload"`
 	CreatedAt     time.Time       `bson:"createdat" json:"created_at"`
 	ProcessedAt   *time.Time      `bson:"processedat" json:"processed_at"`
-	LockedBy      string          `bson:"locked_by,omitempty" json:"locked_by,omitempty"`
-	LockedAt      *time.Time      `bson:"locked_at,omitempty" json:"locked_at,omitempty"`
+	LockedBy      string          `bson:"lockedby,omitempty" json:"locked_by,omitempty"`
+	LockedAt      *time.Time      `bson:"lockedat,omitempty" json:"locked_at,omitempty"`
 }
 
 func NewMessage(aggregateType, aggregateID, eventType string, payload any) (*Message, error) {

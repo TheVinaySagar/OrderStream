@@ -13,6 +13,12 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/writeconcern"
 )
 
+type OrderInterface interface {
+	Create(req *models.Orders) (*models.Orders, error)
+	Update(req *models.Orders) error
+	Delete(id string) error
+	GetbyID(id string) (*models.Orders, error)
+}
 type OrderRepository struct {
 	client           *mongo.Client
 	OrderCollection  *mongo.Collection
@@ -62,8 +68,8 @@ func (r *OrderRepository) Create(req *models.Orders) (*models.Orders, error) {
 
 			// creating Event
 			event := models.OrderCreatedEvent{
-				OrderID: order.ID,
-				Total:   order.Amount,
+				OrderID:     order.ID,
+				TotalAmount: order.Amount,
 			}
 			// constructing outbox msg
 			msg, err := models.NewMessage("order", order.ID, "order.created", event)
@@ -102,17 +108,14 @@ func (r *OrderRepository) Update(req *models.Orders) error {
 
 func (r *OrderRepository) Delete(id string) error {
 	_, err := r.OrderCollection.DeleteOne(context.TODO(), bson.M{"_id": id})
-
 	return err
 }
 
 func (r *OrderRepository) GetbyID(id string) (*models.Orders, error) {
 	var order models.Orders
-
 	err := r.OrderCollection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&order)
 	if err != nil {
 		return nil, err
 	}
-
 	return &order, err
 }
